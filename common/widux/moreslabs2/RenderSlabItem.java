@@ -67,8 +67,7 @@ public class RenderSlabItem implements IItemRenderer
 			textures[side] = block.getBlockTextureFromSideAndMetadata(side, 0);
 		}
 		
-		// Magical code! Switches the texture currently used.
-		Minecraft.getMinecraft().renderEngine.func_98187_b("/terrain.png");
+		Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
 		
 		block.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 		block.setBlockBoundsForItemRender();

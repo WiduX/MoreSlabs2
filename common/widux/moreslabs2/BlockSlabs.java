@@ -36,7 +36,7 @@ public class BlockSlabs extends BlockContainer
 	}
 	
 	@SideOnly(Side.CLIENT)
-    public void func_94332_a(IconRegister iconRegister)
+    public void registerIcons(IconRegister iconRegister)
     {
         this.icons = new Icon[TileEntitySlab.getSlabTypeAmount()][6];
 
@@ -45,7 +45,7 @@ public class BlockSlabs extends BlockContainer
         	for(int side = 0; side < 6; side++)
         	{
         		System.out.println("META: " + meta + ", SIDE: " + side);
-        		this.icons[meta][side] = iconRegister.func_94245_a(TileEntitySlab.getTextureName(meta, side));
+        		this.icons[meta][side] = iconRegister.registerIcon(TileEntitySlab.getTextureName(meta, side));
         	}
         }
     }

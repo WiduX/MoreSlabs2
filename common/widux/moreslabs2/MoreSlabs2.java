@@ -3,6 +3,7 @@ package widux.moreslabs2;
 import java.io.File;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import widux.core.ConfigAssist;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -34,11 +35,13 @@ public class MoreSlabs2
 	public static Block slabTable;
 	public static Block slabs;
 	
+	public static Item slabItem;
+	
 	//public static TileEntitySlab teSlabs;
 	
 	//public static Material slabMaterial = new MaterialSlabs();
 	
-	public static CreativeTabs slabsTab = new CreativeTabSlabs("MoreSlabs 2");
+	public static CreativeTabs slabsTab = new CreativeTabSlabs("MoreSlabs2");
 	
 	public static int renderSlabsID;
 	
@@ -62,7 +65,11 @@ public class MoreSlabs2
 	@Init
 	public void init(FMLInitializationEvent event)
 	{
-		
+		common.addComponents();
+		common.registerBlocks();
+		common.addNames();
+		common.addRecipes();
+		common.addRenderers();
 	}
 	
 	@PostInit

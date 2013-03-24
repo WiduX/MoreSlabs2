@@ -25,6 +25,11 @@ public class ItemSlab extends Item
 		this.setCreativeTab(MoreSlabs2.slabsTab);
 	}
 	
+	public String getItemDisplayName(ItemStack itemstack)
+	{
+		return TileEntitySlab.textures[itemstack.getItemDamage()].getName();
+	}
+	
 	public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float xOffset, float yOffset, float zOffset)
     {
 		int i1 = world.getBlockId(x, y, z);

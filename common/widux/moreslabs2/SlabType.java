@@ -1,17 +1,18 @@
 package widux.moreslabs2;
 
-import net.minecraft.client.Minecraft;
 
 public class SlabType extends Object
 {
 	
 	private String texture;
 	private String[] addTextures;
+	private String itemName;
 	
-	public SlabType(String texture, String[] addTextures)
+	public SlabType(String texture, String[] addTextures, String itemName)
 	{
 		this.texture = texture;
 		this.addTextures = addTextures;
+		this.itemName = itemName;
 	}
 	
 	public String[] getTextures()
@@ -45,6 +46,11 @@ public class SlabType extends Object
 		{
 			return addTextures;
 		}
+	}
+	
+	public String getName()
+	{
+		return this.itemName;
 	}
 	
 }

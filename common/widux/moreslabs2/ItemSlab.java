@@ -1,7 +1,14 @@
 package widux.moreslabs2;
 
 //import net.minecraft.block.Block;
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,13 +27,14 @@ public class ItemSlab extends Item
 	
 	public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float xOffset, float yOffset, float zOffset)
     {
-        /*int currentBlockID = world.getBlockId(x, y, z);
-
-        if (currentBlockID == Block.snow.blockID && (world.getBlockMetadata(x, y, z) & 7) < 1)
+		int i1 = world.getBlockId(x, y, z);
+		int spawnID = MoreSlabs2.slabs.blockID;
+		
+        if (i1 == Block.snow.blockID && (world.getBlockMetadata(x, y, z) & 7) < 1)
         {
             side = 1;
         }
-        else if (currentBlockID != Block.vine.blockID && currentBlockID != Block.tallGrass.blockID && currentBlockID != Block.deadBush.blockID)
+        else if (i1 != Block.vine.blockID && i1 != Block.tallGrass.blockID && i1 != Block.deadBush.blockID)
         {
             if (side == 0)
             {
@@ -68,33 +76,30 @@ public class ItemSlab extends Item
             return false;
         }
         else
-        {*/
-            if (world.getBlockTileEntity(x, y, z) != null && world.getBlockTileEntity(x, y, z) instanceof TileEntitySlab)
+        {
+            if (world.canPlaceEntityOnSide(spawnID, x, y, z, false, side, (Entity)null, item))
             {
-            	TileEntitySlab teSlab = (TileEntitySlab) world.getBlockTileEntity(x, y, z);
-            	
-            	teSlab.setSlabType(teSlab.getSlabType() + 1);
-            	
-            	world.markBlockForRenderUpdate(x, y, z);
-            	
-                /*Block block = Block.blocksList[this.spawnID];
-                int j1 = block.onBlockPlaced(world, x, y, z, side, xOffset, paryOffset0, 0);
+                Block block = Block.blocksList[spawnID];
+                int place = block.onBlockPlaced(world, x, y, z, side, xOffset, yOffset, zOffset, 0);
 
-                if (world.setBlockAndMetadataWithNotify(x, y, z, this.spawnID, j1, 3))
+                if (world.setBlock(x, y, z, spawnID, place, 3))
                 {
-                    if (world.getBlockId(x, y, z) == this.spawnID)
+                    if (world.getBlockId(x, y, z) == spawnID)
                     {
-                        Block.blocksList[this.spawnID].onBlockPlacedBy(world, x, y, z, player, item);
-                        Block.blocksList[this.spawnID].onPostBlockPlaced(world, x, y, z, j1);
+                        Block.blocksList[spawnID].onBlockPlacedBy(world, x, y, z, player, item);
+                        Block.blocksList[spawnID].onPostBlockPlaced(world, x, y, z, place);
+                        
+                        TileEntitySlab slab = (TileEntitySlab) world.getBlockTileEntity(x, y, z);
+                        slab.setSlabType(item.getItemDamage());
                     }
 
                     world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
                     --item.stackSize;
-                }*/
+                }
             }
 
             return true;
-        //}
+        }
     }
 	
 	public Icon getIconFromDamage(int meta)
@@ -107,5 +112,15 @@ public class ItemSlab extends Item
     {
         //iconIndex = iconRegister.func_94245_a("cloth_1");
     }
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(int i, CreativeTabs tab, List subItems)
+	{
+		for(int meta = 0; meta < TileEntitySlab.getSlabTypeAmount(); meta++)
+		{
+			subItems.add(new ItemStack(this, 1, meta));
+		}
+	}
 	
 }

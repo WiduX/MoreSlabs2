@@ -1,6 +1,9 @@
 package widux.moreslabs2;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntitySlab extends TileEntity
@@ -77,5 +80,18 @@ public class TileEntitySlab extends TileEntity
 	{
 		return textures[slabType].getTextures()[side];
 	}
+	
+    public Packet getDescriptionPacket()
+    {
+    	NBTTagCompound tileTag = new NBTTagCompound();
+    	this.writeToNBT(tileTag);
+    	return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 0, tileTag);
+    }
+
+    @Override
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+    {
+    	this.readFromNBT(pkt.customParam1);
+    }
 	
 }

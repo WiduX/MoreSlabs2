@@ -41,20 +41,20 @@ public class RenderSlabItem implements IItemRenderer
 		switch(type)
 		{
 		case ENTITY:
-			doSlabRender((RenderBlocks) data[0], item, -0.5F, -0.5F, -0.5F);
+			doSlabRender((RenderBlocks) data[0], item, -0.5F, -0.5F, -0.5F, true);
 			break;
 		case EQUIPPED:
-			doSlabRender((RenderBlocks) data[0], item, -0.4F, 0.5F, 0.35F);
+			doSlabRender((RenderBlocks) data[0], item, -0.4F, 0.5F, 0.35F, false);
 			break;
 		case INVENTORY:
-			doSlabRender((RenderBlocks) data[0], item, -0.5F, -0.5F, -0.5F);
+			doSlabRender((RenderBlocks) data[0], item, -0.5F, -0.5F, -0.5F, false);
 			break;
 		default:
 			break;
 		}
 	}
 	
-	private void doSlabRender(RenderBlocks render, ItemStack item, float translateX, float translateY, float translateZ)
+	private void doSlabRender(RenderBlocks render, ItemStack item, float translateX, float translateY, float translateZ, boolean renderEntity)
 	{
 		Tessellator tessellator = Tessellator.instance;
 
@@ -64,7 +64,7 @@ public class RenderSlabItem implements IItemRenderer
 
 		for(int side = 0; side < 6; side++)
 		{
-			textures[side] = block.getBlockTextureFromSideAndMetadata(side, 0);
+			textures[side] = block.getBlockTextureFromSideAndMetadata(side, item.getItemDamage());
 		}
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
@@ -72,33 +72,45 @@ public class RenderSlabItem implements IItemRenderer
 		block.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 		block.setBlockBoundsForItemRender();
 		render.setRenderBoundsFromBlock(block);
-
+		
+		if(renderEntity)
+		{
+			GL11.glScalef(0.5F, 0.5F, 0.5F);
+		}
+		
 		GL11.glTranslatef(translateX, translateY, translateZ);
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, -1F, 0.0F);
 		render.renderBottomFace(block, 0.0D, 0.0D, 0.0D, textures[0]);
 		tessellator.draw();
+		
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, 1.0F, 0.0F);
 		render.renderTopFace(block, 0.0D, 0.0D, 0.0D, textures[1]);
 		tessellator.draw();
+		
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, 0.0F, -1F);
 		render.renderEastFace(block, 0.0D, 0.0D, 0.0D, textures[2]);
 		tessellator.draw();
+		
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, 0.0F, 1.0F);
 		render.renderWestFace(block, 0.0D, 0.0D, 0.0D, textures[3]);
 		tessellator.draw();
+		
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(-1F, 0.0F, 0.0F);
 		render.renderNorthFace(block, 0.0D, 0.0D, 0.0D, textures[4]);
 		tessellator.draw();
+		
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(1.0F, 0.0F, 0.0F);
 		render.renderSouthFace(block, 0.0D, 0.0D, 0.0D, textures[5]);
 		tessellator.draw();
+		
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		
 		block.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 	}
 	

@@ -1,14 +1,11 @@
 package widux.moreslabs2;
 
-import java.util.List;
 import java.util.Random;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
@@ -22,7 +19,7 @@ public class BlockSlabs extends BlockContainer
 	public BlockSlabs(int ID, boolean glows)
 	{
 		super(ID, Material.ground);
-		this.setCreativeTab(MoreSlabs2.slabsTab);
+		//this.setCreativeTab(MoreSlabs2.slabsTab);
 		
 		if(glows)
 		{
@@ -44,7 +41,6 @@ public class BlockSlabs extends BlockContainer
         {
         	for(int side = 0; side < 6; side++)
         	{
-        		System.out.println("META: " + meta + ", SIDE: " + side);
         		this.icons[meta][side] = iconRegister.registerIcon(TileEntitySlab.getTextureName(meta, side));
         	}
         }
@@ -86,7 +82,7 @@ public class BlockSlabs extends BlockContainer
 		return 0;
 	}
 	
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    /*@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
     public void getSubBlocks(int unknown, CreativeTabs tab, List subItems)
     {
@@ -94,6 +90,6 @@ public class BlockSlabs extends BlockContainer
     	{
     		subItems.add(new ItemStack(this, 1, meta));
     	}
-    }
+    }*/
 	
 }

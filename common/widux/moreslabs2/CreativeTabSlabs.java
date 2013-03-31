@@ -1,6 +1,5 @@
 package widux.moreslabs2;
 
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
@@ -14,8 +13,7 @@ public class CreativeTabSlabs extends CreativeTabs
 	
 	public ItemStack getIconItemStack()
 	{
-		//return new ItemStack(MoreSlabs2.slabs, 1, 0);
-		return new ItemStack(Block.dirt, 1);
+		return new ItemStack(MoreSlabs2.slabItem, 1, 14);
 	}
 	
 }

@@ -35,6 +35,16 @@ public class ItemSlab extends Item
 		int i1 = world.getBlockId(x, y, z);
 		int spawnID = MoreSlabs2.slabs.blockID;
 		
+		if(world.getBlockId(x, y, z) == spawnID)
+    	{
+    		TileEntitySlab slab = (TileEntitySlab) world.getBlockTileEntity(x, y, z);
+    		if(slab.attemptToPlace(item.getItemDamage(), side))
+    		{
+    			System.out.println("Place?");
+    			return true;
+    		}
+    	}
+		
         if (i1 == Block.snow.blockID && (world.getBlockMetadata(x, y, z) & 7) < 1)
         {
             side = 1;
@@ -82,7 +92,8 @@ public class ItemSlab extends Item
         }
         else
         {
-            if (world.canPlaceEntityOnSide(spawnID, x, y, z, false, side, (Entity)null, item))
+        	
+        	if (world.canPlaceEntityOnSide(spawnID, x, y, z, false, side, (Entity)null, item))
             {
                 Block block = Block.blocksList[spawnID];
                 int place = block.onBlockPlaced(world, x, y, z, side, xOffset, yOffset, zOffset, 0);
@@ -95,13 +106,19 @@ public class ItemSlab extends Item
                         Block.blocksList[spawnID].onPostBlockPlaced(world, x, y, z, place);
                         
                         TileEntitySlab slab = (TileEntitySlab) world.getBlockTileEntity(x, y, z);
-                        slab.setSlabType(item.getItemDamage());
+                        slab.attemptToPlace(item.getItemDamage(), side);
+                        //slab.setSlabType(item.getItemDamage(), side);
                     }
 
                     world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
                     --item.stackSize;
+                    return true;
                 }
             }
+        	else
+        	{
+        		return false;
+        	}
 
             return true;
         }

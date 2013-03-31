@@ -57,11 +57,12 @@ public class TileEntitySlab extends TileEntity
 		new SlabType(null, MultiTextureSlabs.quartzChiseled, "Chiseled Quartz Slab"),
 		new SlabType(null, MultiTextureSlabs.quartzPillar, "Quartz Pillar Slab")};
 	
-	//private final String NBT_DATA = "SlabData";
-	//private int[] slabData = {1, 0, 0, 0, 0, 0};
+	private final String NBT_DATA = "SlabData";
+	private int[] slabData = {1, 0, 0, 0, 0, 0};
+	private boolean[] slabOnSide = {true, false, false, false, false, false};
 	
-	private final String NBT_TYPE = "SlabType";
-	private int slabType;
+	//private final String NBT_TYPE = "SlabType";
+	//private int slabType;
 	
 	public TileEntitySlab()
 	{
@@ -73,7 +74,7 @@ public class TileEntitySlab extends TileEntity
 		super.readFromNBT(nbt);
 		
 		//slabData = nbt.getIntArray(NBT_DATA);
-		slabType = nbt.getInteger(NBT_TYPE);
+		//slabType = nbt.getInteger(NBT_TYPE);
 		
 	}
 	
@@ -81,18 +82,18 @@ public class TileEntitySlab extends TileEntity
 	{
 		super.writeToNBT(nbt);
 		
-		//nbt.setIntArray(NBT_DATA, slabData);
-		nbt.setInteger(NBT_TYPE, slabType);
+		nbt.setIntArray(NBT_DATA, slabData);
+		//nbt.setInteger(NBT_TYPE, slabType);
 	}
 	
-	public int getSlabType()
+	public int getSlabType(int side)
 	{
-		return this.slabType;
+		return this.slabData[side];
 	}
 	
-	public void setSlabType(int newType)
+	public void setSlabType(int newType, int side)
 	{
-		this.slabType = newType;
+		this.slabData[side] = newType;
 	}
 	
 	public static int getSlabTypeAmount()
@@ -103,6 +104,63 @@ public class TileEntitySlab extends TileEntity
 	public static String getTextureName(int slabType, int side)
 	{
 		return textures[slabType].getTextures()[side];
+	}
+	
+	public boolean attemptToPlace(int slabToPlace, int side)
+	{
+		int slabAmount = 0;
+		
+		for(int s = 0; s < 6; s++)
+		{
+			if(slabData[s] != 0)
+			{
+				slabAmount++;
+				this.slabOnSide[s] = true;
+			}
+			else
+			{
+				this.slabOnSide[s] = false;
+			}
+		}
+		
+		if(slabAmount >= 2) // Is the block already full?
+		{
+			return false;
+		}
+		
+		if(slabAmount == 0) // There's no slabs here. This shouldn't get called.
+		{
+			placeOnSide(slabToPlace, side);
+			return true;
+		}
+		
+		if(this.slabOnSide[getOpposite(side)] && !this.slabOnSide[side]) // Is there no slab in the space we're about to fill?
+		{
+			System.out.println("PLACE");
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private int getOpposite(int side)
+	{
+		switch(side)
+		{
+		case 0: return 1;
+		case 1: return 0;
+		case 2: return 3;
+		case 3: return 2;
+		case 4: return 5;
+		case 5: return 4;
+		default: return 0;
+		}
+	}
+	
+	private void placeOnSide(int slabToPlace, int side)
+	{
+		this.slabData[side] = slabToPlace;
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 	
     public Packet getDescriptionPacket()

@@ -49,7 +49,7 @@ public class BlockSlabs extends BlockContainer
     public Icon getBlockTexture(IBlockAccess iba, int x, int y, int z, int blockSide)
     {
     	TileEntitySlab teSlab = (TileEntitySlab) iba.getBlockTileEntity(x, y, z);
-    	return this.icons[teSlab.getSlabType()][blockSide];
+    	return this.icons[teSlab.getSlabType(blockSide)][blockSide];
     }
 	
     public Icon getBlockTextureFromSideAndMetadata(int side, int meta)
